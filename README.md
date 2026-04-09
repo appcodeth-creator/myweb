@@ -10,4 +10,4 @@ python seed.py
 - เปิดเซิร์ฟเวอร์
 - เข้าใช้งานที่ localhost:8000
 
-ทดสอบ by GitHub
+ทดสอบ by Me
