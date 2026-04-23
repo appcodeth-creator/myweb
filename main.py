@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-print('Edit by Team')
 
 # models
 import models
