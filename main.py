@@ -223,6 +223,10 @@ def pvs_upload(request: Request):
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+# TODO: disable warning
+import warnings
+warnings.filterwarnings("ignore")
+
 import easyocr
 import re
 
@@ -387,3 +391,20 @@ def login_api(username: str, password: str):
         status_code=401,
         detail="Invalid username or password"
     )
+
+
+#
+# Unit Test
+#
+@app.get('/api/hello')
+def hello_api():
+    return {'message': 'API Works!'}
+
+
+@app.get('/api/grade')
+def grade_api(score:float = None):
+    if score >= 85:
+        return {'grade': 'A'}
+    elif score >= 75 and score < 85:
+        return {'grade': 'B'}
+    return {'grade': 'F'}
