@@ -7,6 +7,7 @@ result = reader.readtext("pay_slip.jpg")
 for r in result:
     print(r[1])
 
+
 text = " ".join([r[1] for r in result])
 amount = float(re.findall(r'\d+\.\d{2}', text)[0])
 date_match = re.search(r'(\d{1,2})\s+([^\s]+)\s+(\d{2})', text)
