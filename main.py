@@ -46,12 +46,15 @@ def home(request: Request, user=Depends(get_current_user)):
     if isinstance(user, RedirectResponse):
         return user
 
-    return templates.TemplateResponse("index.html", {
-        "request": request,
-        "message": "Hello World",
-        "score": 76,
-        "activities": ["Running", "Football", "Badminton"]
-})
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            "message": "Hello World",
+            "score": 76,
+            "activities": ["Running", "Football", "Badminton"]
+        }
+    )
 
 
 # =============
@@ -73,10 +76,14 @@ def product_list(request: Request):
     db = SessionLocal()
     try:
         products = db.query(Product).all()
-        return templates.TemplateResponse("product_list.html", {
-            "request": request,
-            "products": products
-        })
+        return templates.TemplateResponse(
+            request=request,
+            name="product_list.html",
+            context={
+                "request": request,
+                "products": products
+            }
+        )
     finally:
         db.close()
 
@@ -85,10 +92,14 @@ def create_form(request: Request):
     db = SessionLocal()
     try:
         categories = db.query(Category).all()
-        return templates.TemplateResponse("product_form.html", {
-            "request": request,
-            "categories": categories
-    })
+        return templates.TemplateResponse(
+            request=request,
+            name="product_form.html",
+            context={
+                "request": request,
+                "categories": categories
+            }
+        )
     finally:
         db.close()
 
@@ -129,11 +140,15 @@ def edit_form(request: Request, id: int):
     try:
         product = db.get(Product, id)
         categories = db.query(Category).all()
-        return templates.TemplateResponse("product_form.html", {
-            "request": request,
-            "product": product,
-            "categories": categories
-        })
+        return templates.TemplateResponse(
+            request=request,
+            name="product_form.html",
+            context={
+                "request": request,
+                "product": product,
+                "categories": categories
+            }
+        )
     finally:
         db.close()
 
@@ -191,9 +206,14 @@ def get_datetime():
 #
 @app.get("/products/search", response_class=HTMLResponse)
 def product_search(request: Request):
-    return templates.TemplateResponse("product_search.html", {
-        "request": request,
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="product_search.html",
+        context={
+            "request": request
+        }
+    )
+
 
 from fastapi.security import HTTPBearer
 from jwt_auth import verify_token
@@ -215,9 +235,13 @@ def product_search_api(search: str = "", user=Depends(verify_token)):
 #
 @app.get("/pvs/upload", response_class=HTMLResponse)
 def pvs_upload(request: Request):
-    return templates.TemplateResponse("pvs_upload.html", {
-        "request": request,
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="pvs_upload.html",
+        context={
+            "request": request
+        }
+    )
 
 
 UPLOAD_DIR = "uploads"
@@ -354,9 +378,13 @@ def mark_paid(data: dict):
 def login_page(request: Request):
     if request.session.get("user"):
         return RedirectResponse("/", status_code=303)
-    return templates.TemplateResponse("login.html", {
-        "request": request
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="login.html",
+        context={
+            "request": request
+        }
+    )
 
 
 from fastapi import Request, HTTPException
@@ -365,10 +393,14 @@ def login(request: Request, username: str = Form(...), password: str = Form(...)
     if username == "admin" and password == "1234":
         request.session["user"] = username
         return RedirectResponse("/", status_code=303)
-    return templates.TemplateResponse("login.html", {
-        "request": request,
-        "error": "Login failed"
-    })
+    return templates.TemplateResponse(
+        request=request,
+        name="login.html",
+        context={
+            "request": request,
+            "error": "Login failed"
+        }
+    )
 
 
 @app.get("/logout")
